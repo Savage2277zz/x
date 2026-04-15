@@ -28,17 +28,6 @@ export const projects = [
   },
 ];
 
-export const skills = [
-  "Python",
-  "TypeScript",
-  "Rust",
-  "Solana / Web3",
-  "Next.js / React",
-  "Trading Bots",
-  "DeFi Tools",
-  "AI / Claude API",
-];
-
 export const navLinks = [
   { label: "Home", href: "#home", icon: "home" as const },
   { label: "Projects", href: "#projects", icon: "folder" as const },

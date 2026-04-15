@@ -42,6 +42,7 @@ export default function Navbar() {
     });
 
     return () => observer.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

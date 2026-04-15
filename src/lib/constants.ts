@@ -1,72 +1,65 @@
-export const colors = {
-  deepForestGreen: "#2E4535",
-  mutedSage: "#6C8274",
-  stormySlate: "#5D6C74",
-  overcastSilver: "#A4B3B6",
-  deepUmber: "#4A3A2A",
-  background: "#0A0F0D",
-  textPrimary: "#E8EDE9",
-  textSecondary: "#A4B3B6",
-  accent: "#6C8274",
-};
-
-export const projectColors = [
-  { name: "Deep Forest", hex: "#2E4535" },
-  { name: "Muted Sage", hex: "#6C8274" },
-  { name: "Stormy Slate", hex: "#5D6C74" },
-  { name: "Overcast Silver", hex: "#A4B3B6" },
-  { name: "Deep Umber", hex: "#4A3A2A" },
+export const projects = [
+  {
+    title: "Polymarket Bot",
+    description:
+      "Automated prediction market trading bot with real-time odds analysis.",
+    tag: "Python",
+    gradient: "from-violet-600/30 via-purple-900/20 to-zinc-900",
+    icon: "bot" as const,
+    url: "https://github.com/Savage27z/Polymarket-bot",
+  },
+  {
+    title: "mintBot",
+    description:
+      "High-speed NFT sniping bot for Solana mints with sub-second execution.",
+    tag: "TypeScript",
+    gradient: "from-cyan-600/30 via-teal-900/20 to-zinc-900",
+    icon: "zap" as const,
+    url: "https://github.com/Savage27z/mintBot",
+  },
+  {
+    title: "DEXTool Scanner",
+    description:
+      "Real-time DEX token scanner for detecting new listings and opportunities.",
+    tag: "Python",
+    gradient: "from-amber-600/30 via-orange-900/20 to-zinc-900",
+    icon: "scan" as const,
+    url: "https://github.com/Savage27z/SAVAGE-dextool-scanner",
+  },
 ];
-
-export const project = {
-  title: "Serene Drift",
-  description:
-    "An atmospheric motion graphic piece that explores the intersection of nature and tranquil movement. Through a first-person perspective, it utilizes subtle particle simulation and environmental lighting to capture the quiet, rhythmic feeling of a rainy day on a mountain river.",
-  tags: [
-    "Motion Design",
-    "Nature",
-    "3D Environment",
-    "Atmospheric",
-    "Looping Animation",
-    "Cinematic",
-  ],
-  techniques: [
-    "Environmental Simulation",
-    "Parallax Layering",
-    "Fluid Dynamics",
-    "Color Grading",
-    "Looping Animation",
-  ],
-  mood: "Dreamy • Tranquil • Meditative • Organic",
-  videoSrc: "/videos/serene-drift.mp4",
-};
 
 export const skills = [
   "Python",
   "TypeScript",
-  "Solana / Web3",
-  "Next.js",
   "Rust",
-  "Trading Bots & Automation",
+  "Solana / Web3",
+  "Next.js / React",
+  "Trading Bots",
   "DeFi Tools",
   "AI / Claude API",
 ];
 
+export const navLinks = [
+  { label: "Home", href: "#home", icon: "home" as const },
+  { label: "Projects", href: "#projects", icon: "folder" as const },
+  { label: "About", href: "#about", icon: "user" as const },
+  { label: "Contact", href: "#contact", icon: "mail" as const },
+];
+
 export const socials = [
-  {
-    name: "Twitter/X",
-    url: "https://x.com/savage27z",
-    icon: "x",
-  },
   {
     name: "GitHub",
     url: "https://github.com/Savage27z",
-    icon: "github",
+    icon: "github" as const,
   },
-];
-
-export const navLinks = [
-  { label: "Work", href: "#work" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  {
+    name: "Twitter/X",
+    url: "https://x.com/savage27z",
+    icon: "x" as const,
+  },
+  {
+    name: "Email",
+    url: "mailto:savage27zzz@gmail.com",
+    icon: "mail" as const,
+  },
 ];

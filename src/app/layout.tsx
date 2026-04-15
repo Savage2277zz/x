@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin"],
+const inter = localFont({
+  src: "./fonts/GeistVF.woff",
   variable: "--font-inter",
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
+const jetbrainsMono = localFont({
+  src: "./fonts/GeistMonoVF.woff",
   variable: "--font-mono",
   display: "swap",
 });
@@ -17,14 +17,16 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "SAVAGE✰ | Developer & Builder",
   description:
-    "Developer & Builder. Shipping crypto tools, DeFi bots, and creative experiments from the edge of Web3.",
+    "Developer & Builder. Shipping crypto tools, DeFi bots, and automation from the edge of Web3.",
   keywords: [
     "developer",
     "web3",
     "solana",
-    "crypto tools",
+    "crypto",
     "defi",
     "builder",
+    "python",
+    "typescript",
   ],
 };
 

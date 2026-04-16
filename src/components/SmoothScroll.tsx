@@ -25,12 +25,15 @@ export default function SmoothScroll({
     (window as unknown as Record<string, unknown>).__lenis = lenis;
 
     lenis.on("scroll", ScrollTrigger.update);
-    gsap.ticker.add((time) => {
+
+    const onTick = (time: number) => {
       lenis.raf(time * 1000);
-    });
+    };
+    gsap.ticker.add(onTick);
     gsap.ticker.lagSmoothing(0);
 
     return () => {
+      gsap.ticker.remove(onTick);
       lenis.destroy();
       delete (window as unknown as Record<string, unknown>).__lenis;
     };

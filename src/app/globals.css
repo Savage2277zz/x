@@ -17,8 +17,16 @@
   --border-active: rgba(201, 168, 76, 0.4);
 }
 
-html {
-  scroll-behavior: smooth;
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 body {
@@ -60,4 +68,8 @@ body::before {
 
 .animate-pulse-gold {
   animation: pulse-gold 2s ease-in-out infinite;
+}
+
+.will-change-transform {
+  will-change: transform;
 }

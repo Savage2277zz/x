@@ -1,7 +1,12 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import dynamic from "next/dynamic";
+
+const ParticleField = dynamic(() => import("./ParticleField"), { ssr: false });
 
 const phrases = [
   "I build bots.",
@@ -64,10 +69,9 @@ function VegvisirSVG() {
   );
 }
 
-const staggerDelay = 0.08;
-
-export default function Hero() {
+export default function Hero({ animate = false }: { animate?: boolean }) {
   const [phraseIndex, setPhraseIndex] = useState(0);
+  const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -76,47 +80,95 @@ export default function Hero() {
     return () => clearInterval(interval);
   }, []);
 
+  useGSAP(
+    () => {
+      if (!animate) return;
+
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+      tl.from(".hero-label", { opacity: 0, y: 16, duration: 0.6 })
+        .from(
+          ".hero-char",
+          { y: "100%", opacity: 0, stagger: 0.04, duration: 0.6 },
+          "-=0.3"
+        )
+        .from(
+          ".hero-tagline",
+          { opacity: 0, y: 16, duration: 0.6 },
+          "-=0.2"
+        )
+        .from(
+          ".hero-phrase",
+          { opacity: 0, y: 16, duration: 0.6 },
+          "-=0.2"
+        )
+        .from(
+          ".hero-ctas",
+          { opacity: 0, y: 16, duration: 0.6 },
+          "-=0.2"
+        )
+        .from(
+          ".hero-scroll",
+          { opacity: 0, duration: 0.8 },
+          "-=0.1"
+        );
+    },
+    { scope: heroRef, dependencies: [animate] }
+  );
+
+  const initialStyle = animate
+    ? {}
+    : { opacity: 0 as number };
+
   return (
     <section
       id="home"
       className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8"
     >
+      <ParticleField />
       <VegvisirSVG />
 
-      <div className="relative z-10 max-w-4xl mx-auto text-center py-32">
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut", delay: 0 * staggerDelay }}
-          className="font-mono text-[15px] text-text-secondary mb-4"
+      <div
+        ref={heroRef}
+        className="relative z-10 max-w-4xl mx-auto text-center py-32"
+      >
+        <p
+          className="hero-label font-mono text-[15px] text-text-secondary mb-4"
+          style={initialStyle}
         >
           — It&apos;s
-        </motion.p>
+        </p>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut", delay: 1 * staggerDelay }}
-          className="font-display font-bold text-text-primary tracking-[-0.03em]"
+        <h1
+          className="font-display font-bold text-text-primary tracking-[-0.03em] overflow-hidden"
           style={{ fontSize: "clamp(64px, 10vw, 120px)" }}
         >
-          SAVAGE✰
-        </motion.h1>
+          {"SAVAGE\u2729".split("").map((char, i) => (
+            <span key={i} className="inline-block overflow-hidden">
+              <span
+                className="hero-char inline-block"
+                style={{
+                  color: "var(--text-primary)",
+                  letterSpacing: "-0.03em",
+                  ...initialStyle,
+                }}
+              >
+                {char}
+              </span>
+            </span>
+          ))}
+        </h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut", delay: 2 * staggerDelay }}
-          className="font-mono text-[18px] md:text-[20px] text-text-secondary mt-2"
+        <p
+          className="hero-tagline font-mono text-[18px] md:text-[20px] text-text-secondary mt-2"
+          style={initialStyle}
         >
           Developer &amp; Builder
-        </motion.p>
+        </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut", delay: 3 * staggerDelay }}
-          className="h-[32px] mt-6 flex items-center justify-center"
+        <div
+          className="hero-phrase h-[32px] mt-6 flex items-center justify-center"
+          style={initialStyle}
         >
           <AnimatePresence mode="wait">
             <motion.span
@@ -130,19 +182,24 @@ export default function Hero() {
               {phrases[phraseIndex]}
             </motion.span>
           </AnimatePresence>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut", delay: 4 * staggerDelay }}
-          className="flex items-center justify-center gap-6 mt-10"
+        <div
+          className="hero-ctas flex items-center justify-center gap-6 mt-10"
+          style={initialStyle}
         >
           <a
             href="#projects"
             onClick={(e) => {
               e.preventDefault();
-              document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" });
+              const lenis = (
+                window as unknown as Record<string, unknown>
+              ).__lenis as { scrollTo: (t: string) => void } | undefined;
+              if (lenis) lenis.scrollTo("#projects");
+              else
+                document
+                  .querySelector("#projects")
+                  ?.scrollIntoView({ behavior: "smooth" });
             }}
             className="group relative overflow-hidden border font-mono text-[13px] uppercase tracking-wide px-6 py-3 transition-colors duration-250"
             style={{
@@ -166,14 +223,9 @@ export default function Hero() {
           >
             GitHub ↗
           </a>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut", delay: 5 * staggerDelay }}
-          className="mt-20 flex flex-col items-center gap-2"
-        >
+        <div className="hero-scroll mt-20 flex flex-col items-center gap-2" style={initialStyle}>
           <motion.div
             animate={{ opacity: [0.3, 0.8, 0.3] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
@@ -183,7 +235,7 @@ export default function Hero() {
           <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-text-tertiary">
             scroll
           </span>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

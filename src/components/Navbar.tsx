@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import { Menu, X } from "lucide-react";
 import { navLinks } from "@/lib/constants";
 
@@ -9,6 +11,20 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("#home");
+  const navRef = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      gsap.from(navRef.current, {
+        opacity: 0,
+        y: -10,
+        duration: 0.6,
+        delay: 0.5,
+        ease: "power2.out",
+      });
+    },
+    { scope: navRef }
+  );
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -44,21 +60,31 @@ export default function Navbar() {
     };
   }, [mobileOpen]);
 
-  const handleLinkClick = useCallback(
-    (href: string) => {
-      setMobileOpen(false);
-      const el = document.querySelector(href);
-      el?.scrollIntoView({ behavior: "smooth" });
-    },
-    []
-  );
+  const handleLinkClick = useCallback((href: string) => {
+    setMobileOpen(false);
+    const lenis = (window as unknown as Record<string, unknown>).__lenis as
+      | { scrollTo: (t: string | number, opts?: Record<string, unknown>) => void }
+      | undefined;
+    if (lenis) {
+      if (href === "#") {
+        lenis.scrollTo(0, { duration: 1.2 });
+      } else {
+        lenis.scrollTo(href, { duration: 1.2 });
+      }
+    } else {
+      if (href === "#") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        const el = document.querySelector(href);
+        el?.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, []);
 
   return (
     <>
-      <motion.nav
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
+      <nav
+        ref={navRef}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
             ? "backdrop-blur-[8px] border-b"
@@ -78,7 +104,7 @@ export default function Navbar() {
             href="#"
             onClick={(e) => {
               e.preventDefault();
-              window.scrollTo({ top: 0, behavior: "smooth" });
+              handleLinkClick("#");
             }}
             className="font-display text-[16px] tracking-wide text-text-primary hover:text-accent-gold transition-colors duration-300"
           >
@@ -112,7 +138,7 @@ export default function Navbar() {
             {mobileOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
-      </motion.nav>
+      </nav>
 
       <AnimatePresence>
         {mobileOpen && (

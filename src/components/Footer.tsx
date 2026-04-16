@@ -1,7 +1,12 @@
 "use client";
 
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Mail } from "lucide-react";
-import ScrollReveal from "./ScrollReveal";
+
+gsap.registerPlugin(ScrollTrigger);
 
 function GitHubIcon() {
   return (
@@ -16,6 +21,45 @@ function XIcon() {
     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
     </svg>
+  );
+}
+
+function SplitHeading({
+  text,
+  className,
+}: {
+  text: string;
+  className?: string;
+}) {
+  const ref = useRef<HTMLHeadingElement>(null);
+
+  useGSAP(
+    () => {
+      if (!ref.current) return;
+      const words = ref.current.querySelectorAll(".word-inner");
+      gsap.from(words, {
+        y: "100%",
+        opacity: 0,
+        stagger: 0.08,
+        duration: 0.7,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ref.current,
+          start: "top 80%",
+        },
+      });
+    },
+    { scope: ref }
+  );
+
+  return (
+    <h2 ref={ref} className={className}>
+      {text.split(" ").map((word, i) => (
+        <span key={i} className="inline-block overflow-hidden mr-[0.3em]">
+          <span className="word-inner inline-block">{word}</span>
+        </span>
+      ))}
+    </h2>
   );
 }
 
@@ -38,84 +82,130 @@ const socialLinks = [
 ];
 
 export default function Footer() {
+  const footerRef = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      if (!footerRef.current) return;
+
+      const targets = [".footer-sub", ".footer-cta", ".social-icon", ".footer-bottom"];
+      gsap.set(targets, { opacity: 0, y: 20 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: footerRef.current,
+          start: "top 80%",
+          toggleActions: "play none none none",
+        },
+      });
+
+      tl.to(".footer-sub", {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        ease: "power2.out",
+      })
+        .to(
+          ".footer-cta",
+          { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
+          "-=0.3"
+        )
+        .to(
+          ".social-icon",
+          {
+            opacity: 1,
+            y: 0,
+            stagger: 0.08,
+            duration: 0.5,
+            ease: "power2.out",
+          },
+          "-=0.3"
+        )
+        .to(
+          ".footer-bottom",
+          { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
+          "-=0.2"
+        );
+    },
+    { scope: footerRef }
+  );
+
   return (
     <footer
+      ref={footerRef}
       id="contact"
       className="py-20 sm:py-28 md:py-32 px-4 sm:px-6 lg:px-8"
     >
       <div className="max-w-6xl mx-auto">
-        <ScrollReveal>
-          <div className="text-center">
-            <h2 className="font-display text-[32px] md:text-[48px] uppercase text-text-primary">
-              READY TO BUILD?
-            </h2>
-            <p className="font-mono text-[12px] uppercase tracking-[0.15em] text-text-tertiary mt-4">
-              {"// feel free to reach out for collaborations"}
-            </p>
+        <div className="text-center">
+          <SplitHeading
+            text="READY TO BUILD?"
+            className="font-display text-[32px] md:text-[48px] uppercase text-text-primary"
+          />
+          <p className="footer-sub font-mono text-[12px] uppercase tracking-[0.15em] text-text-tertiary mt-4">
+            {"// feel free to reach out for collaborations"}
+          </p>
 
-            <div className="mt-10">
-              <a
-                href="mailto:savage27zzz@gmail.com"
-                className="group relative inline-block overflow-hidden font-mono text-[13px] uppercase tracking-wide px-8 py-3 transition-colors duration-250"
-                style={{
-                  border: "1px solid var(--accent-gold)",
-                  color: "var(--accent-gold)",
-                }}
-              >
-                <span
-                  className="absolute inset-0 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-250"
-                  style={{ background: "var(--accent-gold)" }}
-                />
-                <span className="relative z-10 group-hover:text-bg-primary transition-colors duration-250">
-                  REACH OUT →
-                </span>
-              </a>
-            </div>
-
-            <div className="flex items-center justify-center gap-3 mt-8">
-              {socialLinks.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target={s.href.startsWith("mailto") ? undefined : "_blank"}
-                  rel={
-                    s.href.startsWith("mailto")
-                      ? undefined
-                      : "noopener noreferrer"
-                  }
-                  className="w-10 h-10 rounded-full flex items-center justify-center text-text-secondary hover:text-accent-gold transition-all duration-300"
-                  style={{
-                    background: "var(--bg-secondary)",
-                    border: "1px solid var(--border-subtle)",
-                  }}
-                  aria-label={s.label}
-                >
-                  {s.icon}
-                </a>
-              ))}
-            </div>
-          </div>
-        </ScrollReveal>
-
-        <ScrollReveal delay={0.2}>
-          <div
-            className="mt-16 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4"
-            style={{ borderTop: "1px solid var(--border-subtle)" }}
-          >
-            <p className="font-mono text-[12px] text-text-tertiary">
-              © 2025 SAVAGE✰ | Forged in code
-            </p>
-            <div className="flex items-center gap-2">
+          <div className="footer-cta mt-10">
+            <a
+              href="mailto:savage27zzz@gmail.com"
+              className="group relative inline-block overflow-hidden font-mono text-[13px] uppercase tracking-wide px-8 py-3 transition-colors duration-250"
+              style={{
+                border: "1px solid var(--accent-gold)",
+                color: "var(--accent-gold)",
+              }}
+            >
               <span
-                className="w-2 h-2 rounded-full animate-pulse-gold"
+                className="absolute inset-0 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-250"
                 style={{ background: "var(--accent-gold)" }}
               />
-              <span className="font-mono text-[12px] text-text-tertiary">
-                AVAILABLE
+              <span className="relative z-10 group-hover:text-bg-primary transition-colors duration-250">
+                REACH OUT →
               </span>
-            </div>
+            </a>
           </div>
-        </ScrollReveal>
+
+          <div className="flex items-center justify-center gap-3 mt-8">
+            {socialLinks.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target={s.href.startsWith("mailto") ? undefined : "_blank"}
+                rel={
+                  s.href.startsWith("mailto")
+                    ? undefined
+                    : "noopener noreferrer"
+                }
+                className="social-icon w-10 h-10 rounded-full flex items-center justify-center text-text-secondary hover:text-accent-gold transition-all duration-300"
+                style={{
+                  background: "var(--bg-secondary)",
+                  border: "1px solid var(--border-subtle)",
+                }}
+                aria-label={s.label}
+              >
+                {s.icon}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div
+          className="footer-bottom mt-16 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4"
+          style={{ borderTop: "1px solid var(--border-subtle)" }}
+        >
+          <p className="font-mono text-[12px] text-text-tertiary">
+            © 2025 SAVAGE✰ | Forged in code
+          </p>
+          <div className="flex items-center gap-2">
+            <span
+              className="w-2 h-2 rounded-full animate-pulse-gold"
+              style={{ background: "var(--accent-gold)" }}
+            />
+            <span className="font-mono text-[12px] text-text-tertiary">
+              AVAILABLE
+            </span>
+          </div>
+        </div>
       </div>
     </footer>
   );

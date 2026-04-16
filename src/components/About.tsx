@@ -3,6 +3,29 @@
 import ScrollReveal from "./ScrollReveal";
 import Image from "next/image";
 
+const stack = [
+  {
+    label: "LANGUAGES",
+    color: "var(--accent-gold)",
+    items: "Python, TypeScript, Rust, JavaScript",
+  },
+  {
+    label: "BLOCKCHAIN & TOOLS",
+    color: "var(--accent-ice)",
+    items: "Solana, Web3.js, Anchor, DeFi Protocols",
+  },
+  {
+    label: "FRAMEWORKS",
+    color: "var(--accent-gold)",
+    items: "Next.js, React, Tailwind CSS, Framer Motion",
+  },
+  {
+    label: "INFRASTRUCTURE",
+    color: "var(--accent-ice)",
+    items: "Vercel, Docker, GitHub Actions, PostgreSQL, Redis",
+  },
+];
+
 export default function About() {
   return (
     <section
@@ -10,18 +33,57 @@ export default function About() {
       className="py-20 sm:py-28 md:py-32 px-4 sm:px-6 lg:px-8"
     >
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
-          <div className="md:col-span-2">
-            <ScrollReveal>
-              <div className="bg-surface border border-border rounded-xl overflow-hidden aspect-square relative">
-                <Image
-                  src="/images/avatar.jpg"
-                  alt="SAVAGE✰"
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6">
-                  <p className="text-xl font-semibold text-text-primary">
+        <ScrollReveal>
+          <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-text-tertiary mb-12">
+            {"// 02 — ABOUT"}
+          </p>
+        </ScrollReveal>
+
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-12">
+          <div className="md:col-span-3 space-y-8">
+            <ScrollReveal delay={0.1}>
+              <div className="space-y-6">
+                <p
+                  className="font-mono text-[18px] leading-[1.8]"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  I don&apos;t manage infrastructure. I build weapons.
+                </p>
+                <p
+                  className="font-mono text-[15px] leading-[1.8]"
+                  style={{ color: "var(--text-secondary)" }}
+                >
+                  Python and TypeScript by day, Rust and Solana by night.
+                  <br />
+                  The bots run. The market moves. I ship.
+                </p>
+                <p
+                  className="font-mono text-[15px] leading-[1.8]"
+                  style={{ color: "var(--text-secondary)" }}
+                >
+                  Crypto doesn&apos;t sleep. Neither does the code.
+                </p>
+              </div>
+            </ScrollReveal>
+
+            <ScrollReveal delay={0.2}>
+              <div
+                className="rounded-xl overflow-hidden"
+                style={{
+                  background: "var(--bg-secondary)",
+                  border: "1px solid var(--border-subtle)",
+                }}
+              >
+                <div className="aspect-[4/3] relative">
+                  <Image
+                    src="/images/avatar.jpg"
+                    alt="SAVAGE✰"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="p-4">
+                  <p className="font-display text-text-primary text-[18px]">
                     SAVAGE✰
                   </p>
                 </div>
@@ -29,71 +91,26 @@ export default function About() {
             </ScrollReveal>
           </div>
 
-          <div className="md:col-span-3 space-y-6">
-            <ScrollReveal delay={0.1}>
-              <div className="bg-surface border border-border rounded-xl p-6 transition-all duration-300 hover:border-violet-500/40 hover:shadow-[0_0_20px_rgba(168,85,247,0.1)]">
-                <span className="font-mono text-xs tracking-widest text-violet-400 uppercase">
-                  Overview
-                </span>
-                <h3 className="text-xl font-semibold text-text-primary mt-2">
-                  What I Do
-                </h3>
-                <p className="text-sm text-text-secondary leading-relaxed mt-3">
-                  I build tools that move fast and execute precisely — trading
-                  bots, DeFi scanners, NFT snipers, and whatever automation the
-                  crypto space demands. Python and TypeScript by day, Rust and
-                  Solana by night. I ship relentlessly because the market
-                  doesn&apos;t wait.
-                </p>
-              </div>
-            </ScrollReveal>
-
+          <div className="md:col-span-2">
             <ScrollReveal delay={0.2}>
-              <div className="relative bg-surface border border-border rounded-xl p-6 transition-all duration-300 hover:border-violet-500/40 hover:shadow-[0_0_20px_rgba(168,85,247,0.1)]">
-                <span className="absolute top-6 right-6 bg-violet-500/20 text-violet-400 text-xs px-3 py-1 rounded-full">
-                  Full-Stack
-                </span>
-                <span className="font-mono text-xs tracking-widest text-violet-400 uppercase">
-                  Technical Arsenal
-                </span>
-                <h3 className="text-xl font-semibold text-text-primary mt-2">
-                  The Stack
-                </h3>
-
-                <div className="grid grid-cols-2 gap-4 mt-4">
-                  <div>
-                    <span className="text-xs font-mono text-violet-400">
-                      LANGUAGES
+              <div className="space-y-0">
+                {stack.map((category, i) => (
+                  <div
+                    key={category.label}
+                    className={`py-5 ${i > 0 ? "border-t" : ""}`}
+                    style={i > 0 ? { borderColor: "var(--border-subtle)" } : undefined}
+                  >
+                    <span
+                      className="font-mono text-[11px] uppercase tracking-[0.15em]"
+                      style={{ color: category.color }}
+                    >
+                      {category.label}
                     </span>
-                    <p className="text-sm text-text-secondary mt-1">
-                      Python, TypeScript, Rust, JavaScript
+                    <p className="font-mono text-[14px] text-text-secondary mt-2">
+                      {category.items}
                     </p>
                   </div>
-                  <div>
-                    <span className="text-xs font-mono text-accent-secondary">
-                      BLOCKCHAIN &amp; TOOLS
-                    </span>
-                    <p className="text-sm text-text-secondary mt-1">
-                      Solana, Web3.js, Anchor, DeFi Protocols
-                    </p>
-                  </div>
-                  <div>
-                    <span className="text-xs font-mono text-violet-400">
-                      FRAMEWORKS
-                    </span>
-                    <p className="text-sm text-text-secondary mt-1">
-                      Next.js, React, Tailwind CSS, Framer Motion
-                    </p>
-                  </div>
-                  <div>
-                    <span className="text-xs font-mono text-accent-secondary">
-                      INFRASTRUCTURE
-                    </span>
-                    <p className="text-sm text-text-secondary mt-1">
-                      Vercel, Docker, GitHub Actions, PostgreSQL, Redis
-                    </p>
-                  </div>
-                </div>
+                ))}
               </div>
             </ScrollReveal>
           </div>
